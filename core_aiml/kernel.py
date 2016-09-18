@@ -18,12 +18,6 @@ from core_aiml.pattern_mgr import PatternMgr
 from core_aiml.word_sub import WordSub
 from aiml_utils.logging_utils import LoggingUtils
 
-try:
-    from configparser import ConfigParser
-except ImportError:
-    import ConfigParser
-
-
 # Python2 Compatability
 try:
     from configparser import ConfigParser
