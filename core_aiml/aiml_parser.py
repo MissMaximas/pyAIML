@@ -4,7 +4,7 @@ import xml.sax
 import xml.sax.handler
 import sys
 
-from utils.logging_utils import LoggingUtils
+from aiml_utils.logging_utils import LoggingUtils
 
 # Python2 Compatability
 try:
@@ -104,7 +104,7 @@ class AimlHandler(ContentHandler):
             if attr["xml:space"] == "default" or attr["xml:space"] == "preserve":
                 self._whitespace_behavior_stack.append(attr["xml:space"])
             else:
-                raise AimlParserError("Invalid value for xml:space attribute " + self._location())
+               raise AimlParserError("Invalid value for xml:space attribute " + self._location())
         except KeyError:
             self._whitespace_behavior_stack.append(self._whitespace_behavior_stack[-1])
 
