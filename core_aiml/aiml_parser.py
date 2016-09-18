@@ -4,6 +4,8 @@ import xml.sax
 import xml.sax.handler
 import sys
 
+from utils.logging_utils import LoggingUtils
+
 # Python2 Compatability
 try:
     str = unicode
@@ -29,6 +31,7 @@ class AimlHandler(ContentHandler):
     _STATE_after_template = 8
 
     def __init__(self, encoding="UTF-8"):
+        self.log = LoggingUtils().log
         self.categories = {}
         self._encoding = encoding
         self._state = self._STATE_outside_aiml
@@ -101,17 +104,16 @@ class AimlHandler(ContentHandler):
             if attr["xml:space"] == "default" or attr["xml:space"] == "preserve":
                 self._whitespace_behavior_stack.append(attr["xml:space"])
             else:
-                print
                 raise AimlParserError("Invalid value for xml:space attribute " + self._location())
         except KeyError:
             self._whitespace_behavior_stack.append(self._whitespace_behavior_stack[-1])
 
     def startElementNS(self, name, qname, attr):
-        print("QNAME: ", qname)
-        print("NAME: ", name)
+        self.log.debug("QNAME: " + qname)
+        self.log.debug("NAME: " + name)
         uri, elem = name
         if elem == "bot":
-            print("name:", attr.getValueByQName("name"), "a'ite?")
+            self.log.debug("name:" + attr.getValueByQName("name") + "a'ite?")
         self.startElement(elem, attr)
         pass
 

@@ -16,6 +16,7 @@ from core_aiml import default_subs
 from core_aiml import utils
 from core_aiml.pattern_mgr import PatternMgr
 from core_aiml.word_sub import WordSub
+from utils.logging_utils import LoggingUtils
 
 
 # Python2 Compatability
@@ -36,6 +37,7 @@ class Kernel:
     _input_stack = "_inputStack"         # Should always be empty in between calls to respond()
 
     def __init__(self):
+        self.log = LoggingUtils().log
         self._verbose_mode = True
         self._version = "PyAIML 0.8.6"
         self._brain = PatternMgr()
@@ -125,10 +127,10 @@ class Kernel:
         except:
             pass
         for cmd in cmds:
-            print(self._respond(cmd, self._global_sessionID))
+            self.log.debug(self._respond(cmd, self._global_sessionID))
 
         if self._verbose_mode:
-            print("Kernel bootstrap completed in {0} seconds".format((time.clock() - start)))
+            self.log.debug("Kernel bootstrap completed in {0} seconds".format((time.clock() - start)))
 
     def verbose(self, isVerbose=True):
         """Enable/disable verbose output mode."""
@@ -162,21 +164,21 @@ class Kernel:
 
         """
         if self._verbose_mode:
-            print("Loading brain from {0}...".format(filename))
+            self.log.debug("Loading brain from {0}...".format(filename))
         start = time.clock()
         self._brain.restore(filename)
         if self._verbose_mode:
             end = time.clock() - start
-            print("done ({0} categories in {1} seconds)".format(self._brain.num_templates(), end))
+            self.log.debug("done ({0} categories in {1} seconds)".format(self._brain.num_templates(), end))
 
     def save_brain(self, filename):
         """Dump the contents of the bot's brain to a file on disk."""
         if self._verbose_mode:
-            print("Saving brain to {0}...".format(filename))
+            self.log.debug("Saving brain to {0}...".format(filename))
         start = time.clock()
         self._brain.save(filename)
         if self._verbose_mode:
-            print("done ({0} seconds)".format(time.clock() - start))
+            self.log.debug("done ({0} seconds)".format(time.clock() - start))
 
     def get_predicate(self, name, sessionID=_global_sessionID):
         """Retrieve the current value of the predicate 'name' from the
@@ -297,7 +299,7 @@ class Kernel:
         """
         for f in glob.glob(filename):
             if self._verbose_mode:
-                print("Loading {0}...".format(f))
+                self.log.debug("Loading {0}...".format(f))
             start = time.clock()
             # Load and parse the AIML file.
             parser = aiml_parser.create_parser()
@@ -315,7 +317,7 @@ class Kernel:
                 self._brain.add(pattern, that, topic, tem)
             # Parsing was successful.
             if self._verbose_mode:
-                print("done ({0} seconds)".format((time.clock() - start)))
+                self.log.debug("done ({0} seconds)".format((time.clock() - start)))
 
     def respond(self, input, sessionID=_global_sessionID):
         """Return the Kernel's response to the input string."""
@@ -549,7 +551,7 @@ class Kernel:
                         # No attributes, no name/value attributes, no
                         # such predicate/session, or processing error.
                         if self._verbose_mode:
-                            print("Something amiss -- skipping listitem", li)
+                            self.log.debug("Something amiss -- skipping listitem", li)
                         raise
                 if not found_match:
                     # Check the last element of listitems.  If it has
@@ -563,12 +565,12 @@ class Kernel:
                         # listitems was empty, no attributes, missing
                         # name/value attributes, or processing error.
                         if self._verbose_mode:
-                            print("error in default listitem")
+                            self.log.debug("error in default listitem")
                         raise
             except:
                 # Some other catastrophic cataclysm
                 if self._verbose_mode:
-                    print("catastrophic condition failure")
+                    self.log.debug("catastrophic condition failure")
                 raise
         return response
 
