@@ -311,9 +311,7 @@ class Kernel:
                 continue
             # store the pattern/template pairs in the PatternMgr.
             for key, tem in handler.categories.items():
-                # TODO: Put back into TUPLE
-                pattern, that, topic = key
-                self._brain.add(pattern, that, topic, tem)
+                self._brain.add(key, tem)
             # Parsing was successful.
             if self._verbose_mode:
                 self.log.debug("done ({0} seconds)".format((time.clock() - start)))
@@ -564,12 +562,12 @@ class Kernel:
                         # listitems was empty, no attributes, missing
                         # name/value attributes, or processing error.
                         if self._verbose_mode:
-                            self.log.debug("error in default listitem")
+                            self.log.debug("Error in default listitem")
                         raise
             except:
                 # Some other catastrophic cataclysm
                 if self._verbose_mode:
-                    self.log.debug("catastrophic condition failure")
+                    self.log.debug("Catastrophic condition failure")
                 raise
         return response
 

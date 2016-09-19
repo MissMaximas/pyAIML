@@ -66,7 +66,7 @@ class PatternMgr:
         except Exception:
             raise Exception("Error restoring PatternMgr from file {0}:".format(filename))
 
-    def add(self, pattern, that, topic, template):
+    def add(self, ptt, template):
         """Add a [pattern/that/topic] tuple and its corresponding template
         to the node tree.
 
@@ -74,6 +74,7 @@ class PatternMgr:
         # TODO: make sure words contains only legal characters
         # (alphanumerics,*,_)
 
+        pattern, that, topic = ptt
         # Navigate through the node tree to the template's location, adding
         # nodes if necessary.
         node = self._root
