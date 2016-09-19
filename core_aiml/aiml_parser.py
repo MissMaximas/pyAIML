@@ -109,8 +109,8 @@ class AimlHandler(ContentHandler):
             self._whitespace_behavior_stack.append(self._whitespace_behavior_stack[-1])
 
     def startElementNS(self, name, qname, attr):
-        self.log.debug("QNAME: " + qname)
-        self.log.debug("NAME: " + name)
+        self.log.debug("QNAME: {0}".format(qname))
+        self.log.debug("NAME: {0}".format(name))
         uri, elem = name
         if elem == "bot":
             self.log.debug("name:" + attr.getValueByQName("name") + "a'ite?")
